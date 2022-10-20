@@ -75,7 +75,7 @@ public class PersonService {
         for (Persons persons : personsList) {
             if (persons.getLastName().contains(lastname) && (persons.getFirstName().contains(firstname))) {
                 for (Medicalrecords medicalrecords : medicalRecordsList) {
-                    if (medicalrecords.getLastName().contains(persons.getLastName())) {
+                    if (medicalrecords.getFirstName().contains(persons.getFirstName()) && medicalrecords.getLastName().contains(persons.getLastName())) {
                         medicationOfPersons.add(new PersonInfoDTO(medicalrecords.getFirstName(), medicalrecords.getLastName(), persons.getAddress(), persons.getCity(), persons.getZip(), persons.getEmail(), medicalrecords.getBirthdate(), medicalrecords.getMedications(), medicalrecords.getAllergies()));
                     }
                 }
@@ -125,6 +125,7 @@ public class PersonService {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                         LocalDate date = LocalDate.parse(strDate, formatter);
                         LocalDate currentDate = LocalDate.now();
+                        System.out.println((ChronoUnit.YEARS.between(date, currentDate)) < 18);
                         if ((ChronoUnit.YEARS.between(date, currentDate)) < 18) {
                             childListByAddress.add(new ChildrenListDTO(persons.getFirstName(), persons.getLastName(), medicalrecords.getBirthdate(), adultsList));
                         }

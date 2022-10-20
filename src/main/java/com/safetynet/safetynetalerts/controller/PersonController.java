@@ -41,7 +41,7 @@ public class PersonController {
 
     // personInfo : liste medical records
     @GetMapping(value = "/personInfo")
-    public ArrayList<PersonInfoDTO> getPersonListMedication(@RequestParam(value = "firstname") String firstname, @RequestParam(value = "lastname") String lastname) {
+    public ArrayList<PersonInfoDTO> getPersonListMedication(@RequestParam(value = "firstName") String firstname, @RequestParam(value = "lastName") String lastname) {
         logger.info("access PersonListMedicationBYName");
         return personService.personListMedication(firstname, lastname);
     }

@@ -35,15 +35,15 @@ public class FireStationController {
     }
 
     // flood : liste des personnes avec medical
-    @GetMapping(value = "/flood")
-    public ArrayList<FloodStationDTO> getPersonsByFireStation(@RequestParam(value = "station") String station) {
+    @GetMapping(value = "/flood/stations")
+    public ArrayList<FloodStationDTO> getPersonsByFireStation(@RequestParam(value = "stations") String station) {
         logger.info("access PersonByFireStation");
         return fireStationService.personsByStation(station);
     }
 
     // phoneAlert : liste des numéros de téléphone
     @GetMapping(value = "/phoneAlert")
-    public ArrayList<PhoneAlertDTO> getPhoneListByStation(@RequestParam(value = "station") String station) {
+    public ArrayList<PhoneAlertDTO> getPhoneListByStation(@RequestParam(value = "firestation") String station) {
         logger.info("access PhoneListByStation");
         return fireStationService.phoneByFireStation(station);
     }
