@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,8 +73,8 @@ public class FireStationServiceTest {
     @Test
     public void deleteFireStationToList() {
         Firestations fireStation = new Firestations("rue de la republique", "2");
-        fireStationService.deleteFireStation(fireStation);
-        verify(fireStationRepository, times(1)).deleteFireStation(fireStation);
+        fireStationService.deleteFireStation(fireStation, "rue de la republique");
+        verify(fireStationRepository, times(1)).deleteFireStation(fireStation, "rue de la republique");
     }
 
     @Test
@@ -97,7 +98,7 @@ public class FireStationServiceTest {
 
     @Test
     public void getPersonByStation() {
-        fireStationService.personsByStation("1");
+        fireStationService.personsByStation(Collections.singletonList("1"));
         verify(fireStationRepository, times(1)).getFireStationList();
     }
 

@@ -1,21 +1,19 @@
 package com.safetynet.safetynetalerts.repository;
 
 import com.safetynet.safetynetalerts.model.DataSource;
+import com.safetynet.safetynetalerts.model.Firestations;
 import com.safetynet.safetynetalerts.model.Medicalrecords;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Repository
-public class MedicalRecordRepository { //extends JsonReadFileRepository
+public class MedicalRecordRepository {
 
     @Autowired
-//    @Qualifier("DataSource")
     private DataSource dataSource;
 
     private final static Logger logger = LogManager.getLogger("MedicalRecordRepository");
@@ -23,7 +21,6 @@ public class MedicalRecordRepository { //extends JsonReadFileRepository
     public ArrayList<Medicalrecords> getMedicalRecordList() {
         logger.info("GetMedicalRecordList access");
         return (ArrayList<Medicalrecords>) dataSource.getMedicalrecords();
-        //return this.readMedicalRecordsList();
     }
 
     public ArrayList<Medicalrecords> addMedicalRecord(Medicalrecords medicalrecords) {
@@ -33,11 +30,17 @@ public class MedicalRecordRepository { //extends JsonReadFileRepository
         return addMedicalrecordsList;
     }
 
-    public ArrayList<Medicalrecords> deleteMedicalRecord(Medicalrecords medicalrecords) {
-        logger.info("DeleteMedicalRecord access, medicalRecord: {}", medicalrecords);
+    public ArrayList<Medicalrecords> deleteMedicalRecord(String firstName, String lastName) {
+        logger.info("DeleteMedicalRecord access, firstName: {}, lastName: {}", firstName, lastName);
         ArrayList<Medicalrecords> deleteMedicalrecordsList = getMedicalRecordList();
-        deleteMedicalrecordsList.remove(medicalrecords);
-        return deleteMedicalrecordsList;
+        for (Medicalrecords medicalRecords: deleteMedicalrecordsList) {
+            if (medicalRecords.getFirstName().contains(firstName) && medicalRecords.getLastName().contains(lastName)) {
+                deleteMedicalrecordsList.remove(medicalRecords);
+                dataSource.setMedicalrecords(deleteMedicalrecordsList);
+                return deleteMedicalrecordsList;
+            }
+        }
+        return deleteMedicalRecord(firstName, lastName);
     }
 
     public Medicalrecords findMedicalRecords(String firstName, String lastName) {
@@ -51,17 +54,18 @@ public class MedicalRecordRepository { //extends JsonReadFileRepository
         return findMedicalRecords(firstName, lastName);
     }
 
-    public Medicalrecords updateMedicalRecord(Medicalrecords medicalrecords, String firstName, String lastName) {
+    public ArrayList<Medicalrecords> updateMedicalRecord(Medicalrecords medicalrecords, String firstName, String lastName) {
         logger.info("UpdateMedicalRecord access, medicalRecord: {}, firstName: {}, lastName: {}", medicalrecords, firstName, lastName);
         ArrayList<Medicalrecords> medicalRecordsName = getMedicalRecordList();
         for (Medicalrecords medicalRecords: medicalRecordsName) {
-            if (medicalRecords.getFirstName().contains(firstName) && medicalrecords.getLastName().contains(lastName)) {
-                medicalRecords.setFirstName(medicalrecords.getFirstName());
+            if (medicalRecords.getFirstName().contains(firstName) && medicalRecords.getLastName().contains(lastName)) {
                 medicalRecords.setBirthdate(medicalrecords.getBirthdate());
                 medicalRecords.setMedications(medicalrecords.getMedications());
                 medicalRecords.setAllergies(medicalrecords.getAllergies());
+                dataSource.setMedicalrecords(medicalRecordsName);
+                ArrayList<Medicalrecords> allUpdatedMedicalRecords = getMedicalRecordList();
+                return allUpdatedMedicalRecords;
             }
-            return medicalRecords;
         }
         return updateMedicalRecord(medicalrecords, firstName, lastName);
     }

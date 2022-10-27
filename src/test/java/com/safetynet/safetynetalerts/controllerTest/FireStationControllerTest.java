@@ -40,23 +40,23 @@ public class FireStationControllerTest {
     }
 
     @Test
-    public void deleteFireStationTest() throws Exception {
-        mockMvc.perform(delete("/firestation")).andExpect(status().isOk());
+    public void updateFireStationTest() throws Exception {
+        mockMvc.perform(put("/firestation/29 15th St").content(asJsonString(new Firestations("29 15th St", "2"))).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    public void updateFireStationTest() throws Exception {
-        mockMvc.perform(put("/firestation/aaaa").content(asJsonString(new Firestations("aaaa", "1"))).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    public void deleteFireStationTest() throws Exception {
+        mockMvc.perform(delete("/firestation/aaaa").content(asJsonString(new Firestations("aaaa", "1"))).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     public void getPersonByStationTest() throws Exception {
-        mockMvc.perform(get("/flood?station=1")).andExpect(status().isOk());
+        mockMvc.perform(get("/flood/stations?stations=1, 2")).andExpect(status().isOk());
     }
 
     @Test
     public void getPhoneListByStationTest() throws Exception {
-        mockMvc.perform(get("/phoneAlert?station=1")).andExpect(status().isOk());
+        mockMvc.perform(get("/phoneAlert?firestation=1")).andExpect(status().isOk());
     }
 
     @Test

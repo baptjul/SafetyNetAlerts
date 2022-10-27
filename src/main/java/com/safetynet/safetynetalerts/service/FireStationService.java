@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -46,9 +47,9 @@ public class FireStationService {
         return fireStationsRepository.addFireStation(fireStations);
     }
 
-    public ArrayList<Firestations> deleteFireStation(Firestations fireStations) {
+    public ArrayList<Firestations> deleteFireStation(Firestations fireStations, String address) {
         logger.info("fireStation service");
-        return fireStationsRepository.deleteFireStation(fireStations);
+        return fireStationsRepository.deleteFireStation(fireStations, address);
     }
 
     public Firestations findFireStation(String address) {
@@ -56,26 +57,28 @@ public class FireStationService {
         return fireStationsRepository.findFireStation(address);
     }
 
-    public Firestations updateFireStation(Firestations fireStations, String address) {
+    public ArrayList<Firestations> updateFireStation(Firestations fireStations, String address) {
         logger.info("updateFireStation service");
         return fireStationsRepository.updateFireStation(fireStations, address);
     }
 
-    public ArrayList<FloodStationDTO> personsByStation(String station) {
+    public ArrayList<FloodStationDTO> personsByStation(List<String> stations) {
         logger.info("personListByStation service");
         ArrayList<Persons> personsList = personRepository.getPersonList();
         ArrayList<Firestations> firestationsList = fireStationsRepository.getFireStationList();
         ArrayList<Medicalrecords> medicalRecordsList = medicalRecordRepository.getMedicalRecordList();
         ArrayList<FloodStationDTO> personsListByStation = new ArrayList<>();
 
-        for (Firestations fireStations : firestationsList) {
-            if (fireStations.getStation().contains(station)) {
-                String fireStationAddress = fireStations.getAddress();
-                for (Persons persons : personsList) {
-                    if (persons.getAddress().contains(fireStationAddress)) {
-                        for (Medicalrecords medicalrecords : medicalRecordsList) {
-                            if (medicalrecords.getFirstName().contains(persons.getFirstName()) && medicalrecords.getLastName().contains(persons.getLastName())) {
-                                personsListByStation.add(new FloodStationDTO(persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getPhone(), medicalrecords.getBirthdate(), medicalrecords.getMedications(), medicalrecords.getAllergies()));
+        for (String selectedFireStations : stations) {
+            for (Firestations fireStations : firestationsList) {
+                if (fireStations.getStation().contains(selectedFireStations)) {
+                    String fireStationAddress = fireStations.getAddress();
+                    for (Persons persons : personsList) {
+                        if (persons.getAddress().contains(fireStationAddress)) {
+                            for (Medicalrecords medicalrecords : medicalRecordsList) {
+                                if (medicalrecords.getFirstName().contains(persons.getFirstName()) && medicalrecords.getLastName().contains(persons.getLastName())) {
+                                    personsListByStation.add(new FloodStationDTO(persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getPhone(), medicalrecords.getBirthdate(), medicalrecords.getMedications(), medicalrecords.getAllergies()));
+                                }
                             }
                         }
                     }

@@ -39,9 +39,9 @@ public class PersonService {
         return personRepository.addPerson(persons);
     }
 
-    public ArrayList<Persons> deletePerson(Persons persons) {
+    public ArrayList<Persons> deletePerson(String firstName, String lastName) {
         logger.info("deletePerson service");
-        return personRepository.deletePerson(persons);
+        return personRepository.deletePerson(firstName, lastName);
     }
 
     public Persons findPerson(String firstName, String lastName) {
@@ -49,7 +49,7 @@ public class PersonService {
         return personRepository.findPerson(firstName, lastName);
     }
 
-    public Persons updatePerson(Persons persons, String firstName, String lastName) {
+    public ArrayList<Persons> updatePerson(Persons persons, String firstName, String lastName) {
         logger.info("updatePerson service");
         return personRepository.updatePerson(persons, firstName, lastName);
     }
@@ -125,7 +125,6 @@ public class PersonService {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                         LocalDate date = LocalDate.parse(strDate, formatter);
                         LocalDate currentDate = LocalDate.now();
-                        System.out.println((ChronoUnit.YEARS.between(date, currentDate)) < 18);
                         if ((ChronoUnit.YEARS.between(date, currentDate)) < 18) {
                             childListByAddress.add(new ChildrenListDTO(persons.getFirstName(), persons.getLastName(), medicalrecords.getBirthdate(), adultsList));
                         }

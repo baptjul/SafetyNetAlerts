@@ -60,15 +60,15 @@ public class PersonController {
     }
 
     @PutMapping(value = "/person/{firstName}/{lastName}")
-    public Persons updatePerson(@RequestBody Persons persons, @PathVariable String firstName, @PathVariable String lastName) {
+    public ArrayList<Persons> updatePerson(@RequestBody Persons persons, @PathVariable String firstName, @PathVariable String lastName) {
         logger.info("access UpdatePerson");
         return personService.updatePerson(persons, firstName, lastName);
     }
 
-    @DeleteMapping(value = "/person")
-    public ArrayList<Persons> deletePerson(Persons persons) {
+    @DeleteMapping(value = "/person/{firstName}/{lastName}")
+    public ArrayList<Persons> deletePerson(@PathVariable String firstName, @PathVariable String lastName) {
         logger.info("access DeletePerson");
-        return personService.deletePerson(persons);
+        return personService.deletePerson(firstName, lastName);
     }
 
 }

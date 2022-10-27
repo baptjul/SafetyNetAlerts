@@ -71,9 +71,9 @@ public class PersonServiceTest {
         when(personRepository.addPerson(person)).thenReturn(personList);
         personService.addPerson(person);
         verify(personRepository, times(1)).addPerson(person);
-        when(personRepository.deletePerson(person)).thenReturn(personList);
-        personService.deletePerson(person);
-        verify(personRepository, times(1)).deletePerson(person);
+        when(personRepository.deletePerson("jane", "doe")).thenReturn(personList);
+        personService.deletePerson("jane", "doe");
+        verify(personRepository, times(1)).deletePerson("jane", "doe");
 
     }
 
@@ -88,7 +88,7 @@ public class PersonServiceTest {
     @Test
     public void updatePersonTest() {
         Persons person = new Persons("john", "doe", "42 rue des ponts", "stras", "12345", "12345678910", "johndoe@gmail.com");
-        when(personRepository.updatePerson(person, "john", "doe")).thenReturn(person);
+        when(personRepository.updatePerson(person, "john", "doe")).thenReturn(personList);
         personService.updatePerson(person, "john", "doe");
         System.out.println(person);
         verify(personRepository, times(1)).updatePerson(person, "john", "doe");

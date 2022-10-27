@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -36,9 +37,9 @@ public class FireStationController {
 
     // flood : liste des personnes avec medical
     @GetMapping(value = "/flood/stations")
-    public ArrayList<FloodStationDTO> getPersonsByFireStation(@RequestParam(value = "stations") String station) {
+    public ArrayList<FloodStationDTO> getPersonsByFireStation(@RequestParam(value = "stations") List<String> stations) {
         logger.info("access PersonByFireStation");
-        return fireStationService.personsByStation(station);
+        return fireStationService.personsByStation(stations);
     }
 
     // phoneAlert : liste des numéros de téléphone
@@ -69,14 +70,14 @@ public class FireStationController {
     }
 
     @PutMapping(value = "/firestation/{address}")
-    public Firestations updateFireStation(@RequestBody Firestations fireStations, @PathVariable String address) {
+    public ArrayList<Firestations> updateFireStation(@RequestBody Firestations fireStations, @PathVariable String address) {
         logger.info("access UpdateFireStation");
         return fireStationService.updateFireStation(fireStations, address);
     }
 
-    @DeleteMapping(value = "/firestation")
-    public ArrayList<Firestations> deleteFireStation(Firestations fireStations) {
+    @DeleteMapping(value = "/firestation/{address}")
+    public ArrayList<Firestations> deleteFireStation(@RequestBody Firestations fireStations, @PathVariable String address) {
         logger.info("access DeleteFireStation");
-        return fireStationService.deleteFireStation(fireStations);
+        return fireStationService.deleteFireStation(fireStations, address);
     }
 }

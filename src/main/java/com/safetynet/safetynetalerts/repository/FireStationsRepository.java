@@ -5,16 +5,14 @@ import com.safetynet.safetynetalerts.model.Firestations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 
 @Repository
-public class FireStationsRepository { //extends JsonReadFileRepository
+public class FireStationsRepository {
 
     @Autowired
-    //    @Qualifier("DataSource")
     private DataSource dataSource;
 
     private final static Logger logger = LogManager.getLogger("PersonRepository");
@@ -22,21 +20,27 @@ public class FireStationsRepository { //extends JsonReadFileRepository
     public ArrayList<Firestations> getFireStationList() {
         logger.info("GetFireStationList access");
         return (ArrayList<Firestations>) dataSource.getFirestations();
-        //return this.readFireStationList();
     }
 
     public ArrayList<Firestations> addFireStation(Firestations fireStations) {
         logger.info("AddFireStation access, fireStation: {}", fireStations);
         ArrayList<Firestations> addFirestationsList = getFireStationList();
         addFirestationsList.add(fireStations);
+        dataSource.setFirestations(addFirestationsList);
         return addFirestationsList;
     }
 
-    public ArrayList<Firestations> deleteFireStation(Firestations fireStations) {
-        logger.info("DeleteFireStation access, fireStation: {}", fireStations);
+    public ArrayList<Firestations> deleteFireStation(Firestations fireStations, String address) {
+        logger.info("DeleteFireStation access, fireStation: {}, address: {}", fireStations, address );
         ArrayList<Firestations> deleteFirestationsList = getFireStationList();
-        deleteFirestationsList.remove(fireStations);
-        return deleteFirestationsList;
+        for (Firestations fireStationsToDel: deleteFirestationsList) {
+            if (fireStationsToDel.getAddress().contains(address)) {
+                deleteFirestationsList.remove(fireStationsToDel);
+                dataSource.setFirestations(deleteFirestationsList);
+                return deleteFirestationsList;
+            }
+        }
+        return deleteFireStation(fireStations, address);
     }
 
     public Firestations findFireStation(String address) {
@@ -50,14 +54,16 @@ public class FireStationsRepository { //extends JsonReadFileRepository
         return findFireStation(address);
     }
 
-    public Firestations updateFireStation(Firestations fireStation, String address) {
+    public ArrayList<Firestations> updateFireStation(Firestations fireStation, String address) {
         logger.info("UpdateFireStation access, fireStation: {}, address: {}", fireStation, address);
         ArrayList<Firestations> allFireStations = getFireStationList();
         for (Firestations fireStations: allFireStations) {
             if (fireStations.getAddress().contains(address)) {
-                fireStations.setStation(String.valueOf(fireStation));
+                fireStations.setStation(fireStation.getStation());
+                dataSource.setFirestations(allFireStations);
+                ArrayList<Firestations> allUpdatedFireStations = getFireStationList();
+                return allUpdatedFireStations;
             }
-            return fireStations;
         }
         return updateFireStation(fireStation, address);
     }

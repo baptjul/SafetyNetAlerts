@@ -43,12 +43,12 @@ public class MedicalRecordControllerTest {
 
     @Test
     public void updateMedicalRecordTest() throws Exception {
-        mockMvc.perform(put("/medicalrecord/john/doe").content(asJsonString(new Medicalrecords("john", "doe", "01/02/1999", List.of(""), List.of("")))).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(put("/medicalrecord/Roger/Boyd").content(asJsonString(new Medicalrecords("Roger", "Boyd", "09/06/2017", List.of(""), List.of("")))).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     public void deleteMedicalRecordTest() throws Exception {
-        mockMvc.perform(delete("/medicalrecord")).andExpect(status().isOk());
+        mockMvc.perform(delete("/medicalrecord/Roger/Boyd")).andExpect(status().isOk());
     }
 
     @Test

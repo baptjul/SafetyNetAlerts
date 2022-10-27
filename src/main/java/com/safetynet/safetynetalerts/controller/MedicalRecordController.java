@@ -37,15 +37,15 @@ public class MedicalRecordController {
     }
 
     @PutMapping(value = "/medicalrecord/{firstName}/{lastName}")
-    public Medicalrecords updateMedicalRecord(@RequestBody Medicalrecords medicalrecords, @PathVariable String firstName, @PathVariable String lastName) {
+    public ArrayList<Medicalrecords> updateMedicalRecord(@RequestBody Medicalrecords medicalrecords, @PathVariable String firstName, @PathVariable String lastName) {
         logger.info("access UpdateMedicalRecord");
         return medicalRecordService.updateMedicalRecord(medicalrecords, firstName, lastName);
     }
 
-    @DeleteMapping(value = "/medicalrecord")
-    public ArrayList<Medicalrecords> deleteMedicalRecord(Medicalrecords medicalrecords) {
+    @DeleteMapping(value = "/medicalrecord/{firstName}/{lastName}")
+    public ArrayList<Medicalrecords> deleteMedicalRecord(@PathVariable String firstName, @PathVariable String lastName) {
         logger.info("access DeleteMedicalRecord");
-        return medicalRecordService.deleteMedicalRecord(medicalrecords);
+        return medicalRecordService.deleteMedicalRecord(firstName, lastName);
     }
 
 }

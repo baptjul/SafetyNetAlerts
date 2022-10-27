@@ -33,9 +33,9 @@ public class MedicalRecordService {
         return medicalRecordRepository.addMedicalRecord(medicalrecords);
     }
 
-    public ArrayList<Medicalrecords> deleteMedicalRecord(Medicalrecords medicalrecords) {
+    public ArrayList<Medicalrecords> deleteMedicalRecord(String firstName, String lastName) {
         logger.info("deleteMedicalRecord service");
-        return medicalRecordRepository.deleteMedicalRecord(medicalrecords);
+        return medicalRecordRepository.deleteMedicalRecord(firstName, lastName);
     }
 
     public Medicalrecords findMedicalRecords(String firstName, String lastName) {
@@ -43,7 +43,7 @@ public class MedicalRecordService {
         return medicalRecordRepository.findMedicalRecords(firstName, lastName);
     }
 
-    public Medicalrecords updateMedicalRecord(Medicalrecords medicalrecords, String firstName, String lastName) {
+    public ArrayList<Medicalrecords> updateMedicalRecord(Medicalrecords medicalrecords, String firstName, String lastName) {
         logger.info("updateMedicalRecord service");
         return medicalRecordRepository.updateMedicalRecord(medicalrecords, firstName, lastName);
     }

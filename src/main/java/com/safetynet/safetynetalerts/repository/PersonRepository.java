@@ -1,11 +1,11 @@
 package com.safetynet.safetynetalerts.repository;
 
 import com.safetynet.safetynetalerts.model.DataSource;
+import com.safetynet.safetynetalerts.model.Firestations;
 import com.safetynet.safetynetalerts.model.Persons;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,10 +13,9 @@ import java.util.ArrayList;
 
 @Repository
 
-public class PersonRepository { //extends JsonReadFileRepository
+public class PersonRepository {
 
     @Autowired
-//    @Qualifier("DataSource")
     private DataSource dataSource;
 
     private final static Logger logger = LogManager.getLogger("PersonRepository");
@@ -34,11 +33,17 @@ public class PersonRepository { //extends JsonReadFileRepository
         return addPersonsList;
     }
 
-    public ArrayList<Persons> deletePerson(Persons persons) {
-        logger.info("DeletePerson access, person: {}", persons);
+    public ArrayList<Persons> deletePerson(String firstName, String lastName) {
+        logger.info("DeletePerson access, firstName: {}, lastName: {}", firstName, lastName);
         ArrayList<Persons> deletePersonsOfList = getPersonList();
-        deletePersonsOfList.remove(persons);
-        return deletePersonsOfList;
+        for (Persons personsToDel : deletePersonsOfList) {
+            if (personsToDel.getLastName().contains(lastName) && personsToDel.getFirstName().contains(firstName)) {
+                deletePersonsOfList.remove(personsToDel);
+                dataSource.setPersons(deletePersonsOfList);
+                return deletePersonsOfList;
+            }
+        }
+        return deletePerson(firstName, lastName);
     }
 
     public Persons findPerson(String firstName, String lastName) {
@@ -52,18 +57,20 @@ public class PersonRepository { //extends JsonReadFileRepository
         return findPerson(firstName, lastName);
     }
 
-    public Persons updatePerson(Persons person, String firstName, String lastName) {
+    public ArrayList<Persons> updatePerson(Persons person, String firstName, String lastName) {
         logger.info("UpdatePerson access, firstName: {}, lastName: {}", firstName, lastName);
         ArrayList<Persons> personsList = getPersonList();
         for (Persons persons : personsList) {
             if (persons.getLastName().contains(lastName) && persons.getFirstName().contains(firstName)) {
-                persons.setAddress(persons.getAddress());
-                persons.setCity(persons.getCity());
-                persons.setZip(persons.getZip());
-                persons.setPhone(persons.getPhone());
-                persons.setEmail(persons.getEmail());
+                persons.setAddress(person.getAddress());
+                persons.setCity(person.getCity());
+                persons.setZip(person.getZip());
+                persons.setPhone(person.getPhone());
+                persons.setEmail(person.getEmail());
+                dataSource.setPersons(personsList);
+                ArrayList<Persons> allUpdatedPersonsList = getPersonList();
+                return allUpdatedPersonsList;
             }
-            return persons;
         }
         return updatePerson(person, firstName, firstName);
     }

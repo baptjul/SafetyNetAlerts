@@ -55,15 +55,15 @@ public class MedicalRecordServiceTest {
     @Test
     public void deleteMedicalRecordTest() {
         Medicalrecords medicalRecord = new Medicalrecords("jane", "doe", "02/03/2000", List.of(""), List.of(""));
-        when(medicalRecordRepository.deleteMedicalRecord(medicalRecord)).thenReturn(medicalList);
-        medicalRecordService.deleteMedicalRecord(medicalRecord);
-        verify(medicalRecordRepository, times(1)).deleteMedicalRecord(medicalRecord);
+        when(medicalRecordRepository.deleteMedicalRecord("john", "doe")).thenReturn(medicalList);
+        medicalRecordService.deleteMedicalRecord("john", "doe");
+        verify(medicalRecordRepository, times(1)).deleteMedicalRecord("john", "doe");
     }
 
     @Test
     public void findMedicalRecordByNameTest() {
         Medicalrecords medicalRecord = new Medicalrecords("john", "doe", "01/02/1999", List.of(""), List.of(""));
-        when(medicalRecordRepository.findMedicalRecords("john","doe" )).thenReturn(medicalRecord);
+        when(medicalRecordRepository.findMedicalRecords("john", "doe")).thenReturn(medicalRecord);
         medicalRecordService.findMedicalRecords("john", "doe");
         verify(medicalRecordRepository, times(1)).findMedicalRecords("john", "doe");
     }
@@ -71,7 +71,7 @@ public class MedicalRecordServiceTest {
     @Test
     public void updateMedicalRecordTest() {
         Medicalrecords medicalRecord = new Medicalrecords("john", "john", "01/02/19993", List.of("aspirine"), List.of(""));
-        when(medicalRecordRepository.updateMedicalRecord(medicalRecord, "john", "doe")).thenReturn(medicalRecord);
+        when(medicalRecordRepository.updateMedicalRecord(medicalRecord, "john", "doe")).thenReturn(medicalList);
         medicalRecordService.updateMedicalRecord(medicalRecord, "john", "doe");
         verify(medicalRecordRepository, times(1)).updateMedicalRecord(medicalRecord, "john", "doe");
     }
